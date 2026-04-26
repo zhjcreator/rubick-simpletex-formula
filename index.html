@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://server.simpletex.cn https://cdn.jsdelivr.net; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src https://server.simpletex.cn;">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SimpleTex 公式识别</title>
+  <link rel="stylesheet" href="./style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: { fontCache: 'global' },
+      startup: { typeset: false }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+  <main class="app">
+    <section class="settings" id="settingsPanel" aria-label="SimpleTex 设置">
+      <label class="field">
+        <span>UAT Token</span>
+        <input id="tokenInput" type="password" autocomplete="off" placeholder="SimpleTex 用户授权令牌">
+      </label>
+      <label class="field">
+        <span>模型</span>
+        <select id="modelSelect">
+          <option value="turbo">轻量模型 latex_ocr_turbo</option>
+          <option value="standard">标准模型 latex_ocr</option>
+        </select>
+      </label>
+      <button class="primary-button" id="saveSettingsButton" type="button">保存设置</button>
+    </section>
+
+    <section class="workspace">
+      <button class="icon-button settings-toggle" id="settingsButton" type="button" aria-label="设置" title="设置">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+      <div class="dropzone" id="dropzone">
+        <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp,image/bmp" hidden>
+        <div class="preview" id="imagePreview">
+          <span id="statusText">粘贴、拖入或选择一张公式图片</span>
+        </div>
+        <div class="drop-actions">
+          <button class="primary-button" id="chooseButton" type="button">选择图片</button>
+          <button class="secondary-button" id="recognizeButton" type="button" disabled>开始识别</button>
+        </div>
+      </div>
+
+      <div class="editor">
+        <label class="editor-label" for="latexInput">LaTeX</label>
+        <textarea id="latexInput" spellcheck="false" placeholder="识别结果会出现在这里，也可以直接编辑 LaTeX"></textarea>
+        <div class="editor-actions">
+          <button class="secondary-button" id="copyLatexButton" type="button">复制 LaTeX</button>
+          <button class="secondary-button" id="copyMarkdownButton" type="button">复制 Markdown</button>
+          <button class="secondary-button" id="clearButton" type="button">清空</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="result">
+      <div class="result-header">
+        <span>预览</span>
+        <span id="confidenceText"></span>
+      </div>
+      <div class="math-preview" id="mathPreview">等待公式</div>
+    </section>
+  </main>
+
+  <script src="./renderer.js"></script>
+</body>
+</html>

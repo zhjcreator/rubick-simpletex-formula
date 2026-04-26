@@ -1,0 +1,33 @@
+{
+  "name": "rubick-simpletex-formula",
+  "pluginName": "SimpleTex 公式识别",
+  "description": "在 rubick 中识别图片公式，编辑 LaTeX 并实时预览。",
+  "author": "Codex",
+  "license": "MIT",
+  "main": "index.html",
+  "preload": "preload.js",
+  "version": "0.1.2",
+  "logo": "https://simpletex.cn/favicon.ico",
+  "homePage": "https://github.com/rubickCenter/rubick",
+  "pluginType": "ui",
+  "features": [
+    {
+      "code": "formula",
+      "explain": "识别并编辑数学公式",
+      "cmds": [
+        "公式识别",
+        "latex",
+        "simpletex",
+        "ocr",
+        {
+          "type": "img",
+          "label": "识别图片公式"
+        }
+      ]
+    }
+  ],
+  "scripts": {
+    "lint": "node --check preload.js && node --check renderer.js"
+  },
+  "devDependencies": {}
+}
