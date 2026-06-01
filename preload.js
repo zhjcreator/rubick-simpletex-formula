@@ -120,24 +120,6 @@
     document.body.removeChild(textarea);
   }
 
-  async function copyRichText(html, text) {
-    if (
-      navigator.clipboard &&
-      navigator.clipboard.write &&
-      typeof ClipboardItem !== 'undefined'
-    ) {
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          'text/html': new Blob([html], { type: 'text/html' }),
-          'text/plain': new Blob([text], { type: 'text/plain' })
-        })
-      ]);
-      return;
-    }
-
-    await copyText(text);
-  }
-
   window.rubickFormula = {
     readSettings,
     saveSettings,
@@ -145,7 +127,6 @@
     setHeight,
     onReady,
     onEnter,
-    copyText,
-    copyRichText
+    copyText
   };
 })();

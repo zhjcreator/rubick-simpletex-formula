@@ -9,7 +9,7 @@
 - 支持自动调用 SimpleTex 识别，并显示识别置信度。
 - 支持 SimpleTex `latex_ocr_turbo` 和 `latex_ocr` 模型。
 - 本地保存 SimpleTex UAT Token 和模型偏好。
-- 支持编辑 LaTeX、MathJax 实时预览、复制 LaTeX、Markdown 公式块或 Word 公式。
+- 支持编辑 LaTeX、MathJax 实时预览、复制 LaTeX、Markdown 公式块或 Word 公式输入。
 - 无构建依赖，Rubick 可直接加载 `index.html`。
 
 ## 安装调试
@@ -41,11 +41,19 @@ rubick-simpletex-formula
 1. 在 Rubick 中输入 `公式识别`、`latex`、`simpletex` 或 `ocr` 打开插件。
 2. 粘贴、拖入或选择一张公式图片。
 3. 点击“开始识别”，或直接在粘贴图片后等待自动识别。
-4. 编辑识别出的 LaTeX，复制 LaTeX、Markdown 公式块或 Word 公式。
+4. 编辑识别出的 LaTeX，复制 LaTeX、Markdown 公式块或 Word 公式输入。
 
-## Word 公式
+## Word 公式输入
 
-点击“复制 Word 公式”会把当前 LaTeX 转成 MathML 并写入富文本剪贴板。粘贴到 Microsoft Word 时，Word 通常会把它作为可编辑公式插入；如果当前浏览器环境不支持富文本剪贴板，插件会自动退回复制 LaTeX。
+点击“复制 Word 输入”会把当前 LaTeX 转成更适合 Microsoft Word 公式编辑器的线性输入。
+
+在 Word 中使用：
+
+1. 按 `Alt+=` 插入公式输入框。
+2. 粘贴插件复制的内容。
+3. Word 会把常见的分式、上下标、根号和希腊字母转换为可编辑公式。
+
+说明：Word 对 MathML 富文本剪贴板的支持在不同系统和版本里很不稳定，因此插件默认复制线性公式输入，而不是直接写入 MathML。
 
 ## SimpleTex Token
 

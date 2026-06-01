@@ -100,18 +100,6 @@
         return Promise.resolve();
       },
       copyRichText: function (html, text) {
-        if (
-          navigator.clipboard &&
-          navigator.clipboard.write &&
-          typeof ClipboardItem !== 'undefined'
-        ) {
-          return navigator.clipboard.write([
-            new ClipboardItem({
-              'text/html': new Blob([html], { type: 'text/html' }),
-              'text/plain': new Blob([text], { type: 'text/plain' })
-            })
-          ]);
-        }
         return this.copyText(text);
       }
     };
@@ -379,33 +367,52 @@
   async function copyWordFormula() {
     const latex = elements.latexInput.value.trim();
     if (!latex) {
-      setStatus('没有可复制的 Word 公式', true);
+      setStatus('没有可复制的 Word 输入', true);
       return;
     }
 
-    try {
-      const mathml = latexToMathml(latex);
-      await window.rubickFormula.copyRichText(
-        '<html><body>' + mathml + '</body></html>',
-        latex
-      );
-      setStatus('已复制 Word 公式');
-    } catch (error) {
-      await window.rubickFormula.copyText(latex);
-      setStatus('已复制 LaTeX，当前环境暂不支持 Word 公式格式', true);
-    }
+    await window.rubickFormula.copyText(latexToWordLinear(latex));
+    setStatus('已复制 Word 输入，请在 Word 中按 Alt+= 后粘贴');
   }
 
-  function latexToMathml(latex) {
-    if (
-      window.MathJax &&
-      window.MathJax.tex2mml &&
-      typeof window.MathJax.tex2mml === 'function'
-    ) {
-      return window.MathJax.tex2mml(latex, { display: true });
-    }
-
-    throw new Error('MathJax MathML converter is unavailable');
+  function latexToWordLinear(latex) {
+    return latex
+      .replace(/\s+/g, ' ')
+      .replace(/\\left/g, '')
+      .replace(/\\right/g, '')
+      .replace(/\\,/g, ' ')
+      .replace(/\\;/g, ' ')
+      .replace(/\\!/g, '')
+      .replace(/\\cdot/g, '*')
+      .replace(/\\times/g, '*')
+      .replace(/\\div/g, '/')
+      .replace(/\\leq/g, '<=')
+      .replace(/\\geq/g, '>=')
+      .replace(/\\neq/g, '!=')
+      .replace(/\\approx/g, '≈')
+      .replace(/\\infty/g, '∞')
+      .replace(/\\pi/g, 'π')
+      .replace(/\\theta/g, 'θ')
+      .replace(/\\alpha/g, 'α')
+      .replace(/\\beta/g, 'β')
+      .replace(/\\gamma/g, 'γ')
+      .replace(/\\delta/g, 'δ')
+      .replace(/\\lambda/g, 'λ')
+      .replace(/\\mu/g, 'μ')
+      .replace(/\\sigma/g, 'σ')
+      .replace(/\\phi/g, 'φ')
+      .replace(/\\omega/g, 'ω')
+      .replace(/\\mathbf\{([^{}]+)\}/g, '$1')
+      .replace(/\\mathrm\{([^{}]+)\}/g, '$1')
+      .replace(/\\operatorname\{([^{}]+)\}/g, '$1')
+      .replace(/\\text\{([^{}]+)\}/g, '$1')
+      .replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g, '($1)/($2)')
+      .replace(/\\sqrt\{([^{}]+)\}/g, 'sqrt($1)')
+      .replace(/\\sqrt\[([^\\[\\]{}]+)\]\{([^{}]+)\}/g, 'root($2,$1)')
+      .replace(/\^\{([^{}]+)\}/g, '^($1)')
+      .replace(/_\{([^{}]+)\}/g, '_($1)')
+      .replace(/[{}]/g, '')
+      .trim();
   }
 
   function clearAll() {
