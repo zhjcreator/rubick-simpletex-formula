@@ -367,52 +367,36 @@
   async function copyWordFormula() {
     const latex = elements.latexInput.value.trim();
     if (!latex) {
-      setStatus('没有可复制的 Word 输入', true);
+      setStatus('没有可复制的 Word MathML', true);
       return;
     }
 
-    await window.rubickFormula.copyText(latexToWordLinear(latex));
-    setStatus('已复制 Word 输入，请在 Word 中按 Alt+= 后粘贴');
+    try {
+      await waitForMathJax();
+      await window.rubickFormula.copyText(latexToMathml(latex));
+      setStatus('已复制 Word MathML，可直接粘贴到 Word');
+    } catch (error) {
+      await window.rubickFormula.copyText(latex);
+      setStatus('MathML 转换失败，已复制 LaTeX', true);
+    }
   }
 
-  function latexToWordLinear(latex) {
-    return latex
-      .replace(/\s+/g, ' ')
-      .replace(/\\left/g, '')
-      .replace(/\\right/g, '')
-      .replace(/\\,/g, ' ')
-      .replace(/\\;/g, ' ')
-      .replace(/\\!/g, '')
-      .replace(/\\cdot/g, '*')
-      .replace(/\\times/g, '*')
-      .replace(/\\div/g, '/')
-      .replace(/\\leq/g, '<=')
-      .replace(/\\geq/g, '>=')
-      .replace(/\\neq/g, '!=')
-      .replace(/\\approx/g, '≈')
-      .replace(/\\infty/g, '∞')
-      .replace(/\\pi/g, 'π')
-      .replace(/\\theta/g, 'θ')
-      .replace(/\\alpha/g, 'α')
-      .replace(/\\beta/g, 'β')
-      .replace(/\\gamma/g, 'γ')
-      .replace(/\\delta/g, 'δ')
-      .replace(/\\lambda/g, 'λ')
-      .replace(/\\mu/g, 'μ')
-      .replace(/\\sigma/g, 'σ')
-      .replace(/\\phi/g, 'φ')
-      .replace(/\\omega/g, 'ω')
-      .replace(/\\mathbf\{([^{}]+)\}/g, '$1')
-      .replace(/\\mathrm\{([^{}]+)\}/g, '$1')
-      .replace(/\\operatorname\{([^{}]+)\}/g, '$1')
-      .replace(/\\text\{([^{}]+)\}/g, '$1')
-      .replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g, '($1)/($2)')
-      .replace(/\\sqrt\{([^{}]+)\}/g, 'sqrt($1)')
-      .replace(/\\sqrt\[([^\\[\\]{}]+)\]\{([^{}]+)\}/g, 'root($2,$1)')
-      .replace(/\^\{([^{}]+)\}/g, '^($1)')
-      .replace(/_\{([^{}]+)\}/g, '_($1)')
-      .replace(/[{}]/g, '')
-      .trim();
+  async function waitForMathJax() {
+    if (window.MathJax && window.MathJax.startup && window.MathJax.startup.promise) {
+      await window.MathJax.startup.promise;
+    }
+  }
+
+  function latexToMathml(latex) {
+    if (
+      window.MathJax &&
+      window.MathJax.tex2mml &&
+      typeof window.MathJax.tex2mml === 'function'
+    ) {
+      return window.MathJax.tex2mml(latex, { display: true });
+    }
+
+    throw new Error('MathJax MathML converter is unavailable');
   }
 
   function clearAll() {
