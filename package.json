@@ -2,7 +2,7 @@
   "name": "rubick-simpletex-formula",
   "pluginName": "SimpleTex 公式识别",
   "description": "在 rubick 中识别图片公式，编辑 LaTeX 并实时预览。",
-  "author": "Codex",
+  "author": "zhjcreator",
   "license": "MIT",
   "main": "index.html",
   "preload": "preload.js",
@@ -27,8 +27,25 @@
     "Word公式"
   ],
   "logo": "https://simpletex.cn/favicon.ico",
-  "homePage": "https://github.com/rubickCenter/rubick",
+  "homepage": "https://github.com/zhjcreator/rubick-simpletex-formula#readme",
+  "homePage": "https://github.com/zhjcreator/rubick-simpletex-formula",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhjcreator/rubick-simpletex-formula.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zhjcreator/rubick-simpletex-formula/issues"
+  },
   "pluginType": "ui",
+  "files": [
+    "index.html",
+    "preload.js",
+    "renderer.js",
+    "style.css",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ],
   "features": [
     {
       "code": "formula",
