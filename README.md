@@ -2,6 +2,8 @@
 
 一个轻量的 Rubick UI 插件，用 SimpleTex API 快速识别图片中的数学公式，并提供 LaTeX 编辑、预览和复制能力。
 
+关键词：Rubick 插件、SimpleTex、公式识别、数学公式 OCR、图片转 LaTeX、LaTeX OCR、MathJax、MathML、Word 公式、OMML。
+
 ## 功能
 
 - 支持 Rubick 图片入口：剪贴板有图片或向 Rubick 粘贴图片时，可直接选择“识别图片公式”。
