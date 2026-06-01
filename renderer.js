@@ -19,6 +19,7 @@
     latexInput: document.getElementById('latexInput'),
     copyLatexButton: document.getElementById('copyLatexButton'),
     copyMarkdownButton: document.getElementById('copyMarkdownButton'),
+    copyWordButton: document.getElementById('copyWordButton'),
     clearButton: document.getElementById('clearButton'),
     mathPreview: document.getElementById('mathPreview'),
     confidenceText: document.getElementById('confidenceText')
@@ -97,6 +98,21 @@
         document.execCommand('copy');
         document.body.removeChild(textarea);
         return Promise.resolve();
+      },
+      copyRichText: function (html, text) {
+        if (
+          navigator.clipboard &&
+          navigator.clipboard.write &&
+          typeof ClipboardItem !== 'undefined'
+        ) {
+          return navigator.clipboard.write([
+            new ClipboardItem({
+              'text/html': new Blob([html], { type: 'text/html' }),
+              'text/plain': new Blob([text], { type: 'text/plain' })
+            })
+          ]);
+        }
+        return this.copyText(text);
       }
     };
   }
@@ -134,6 +150,7 @@
     elements.latexInput.addEventListener('input', updatePreview);
     elements.copyLatexButton.addEventListener('click', copyLatex);
     elements.copyMarkdownButton.addEventListener('click', copyMarkdown);
+    elements.copyWordButton.addEventListener('click', copyWordFormula);
     elements.clearButton.addEventListener('click', clearAll);
 
     document.addEventListener('paste', handlePaste);
@@ -357,6 +374,38 @@
     }
     await window.rubickFormula.copyText('$$\n' + latex + '\n$$');
     setStatus('已复制 Markdown 公式');
+  }
+
+  async function copyWordFormula() {
+    const latex = elements.latexInput.value.trim();
+    if (!latex) {
+      setStatus('没有可复制的 Word 公式', true);
+      return;
+    }
+
+    try {
+      const mathml = latexToMathml(latex);
+      await window.rubickFormula.copyRichText(
+        '<html><body>' + mathml + '</body></html>',
+        latex
+      );
+      setStatus('已复制 Word 公式');
+    } catch (error) {
+      await window.rubickFormula.copyText(latex);
+      setStatus('已复制 LaTeX，当前环境暂不支持 Word 公式格式', true);
+    }
+  }
+
+  function latexToMathml(latex) {
+    if (
+      window.MathJax &&
+      window.MathJax.tex2mml &&
+      typeof window.MathJax.tex2mml === 'function'
+    ) {
+      return window.MathJax.tex2mml(latex, { display: true });
+    }
+
+    throw new Error('MathJax MathML converter is unavailable');
   }
 
   function clearAll() {

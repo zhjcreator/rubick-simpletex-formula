@@ -9,7 +9,7 @@
 - 支持自动调用 SimpleTex 识别，并显示识别置信度。
 - 支持 SimpleTex `latex_ocr_turbo` 和 `latex_ocr` 模型。
 - 本地保存 SimpleTex UAT Token 和模型偏好。
-- 支持编辑 LaTeX、MathJax 实时预览、复制 LaTeX 或 Markdown 公式块。
+- 支持编辑 LaTeX、MathJax 实时预览、复制 LaTeX、Markdown 公式块或 Word 公式。
 - 无构建依赖，Rubick 可直接加载 `index.html`。
 
 ## 安装调试
@@ -41,7 +41,11 @@ rubick-simpletex-formula
 1. 在 Rubick 中输入 `公式识别`、`latex`、`simpletex` 或 `ocr` 打开插件。
 2. 粘贴、拖入或选择一张公式图片。
 3. 点击“开始识别”，或直接在粘贴图片后等待自动识别。
-4. 编辑识别出的 LaTeX，复制 LaTeX 或 Markdown 公式块。
+4. 编辑识别出的 LaTeX，复制 LaTeX、Markdown 公式块或 Word 公式。
+
+## Word 公式
+
+点击“复制 Word 公式”会把当前 LaTeX 转成 MathML 并写入富文本剪贴板。粘贴到 Microsoft Word 时，Word 通常会把它作为可编辑公式插入；如果当前浏览器环境不支持富文本剪贴板，插件会自动退回复制 LaTeX。
 
 ## SimpleTex Token
 
